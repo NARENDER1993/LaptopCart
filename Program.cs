@@ -1,3 +1,5 @@
+using Microsoft.EntityFrameworkCore;
+
 namespace LaptopCart
 {
     public class Program
@@ -6,9 +8,11 @@ namespace LaptopCart
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // Add services to the container.
+            // Add services to the container. 
             builder.Services.AddControllersWithViews();
 
+            builder.Services.AddDbContext<Data.ApplicationDbContext>(options =>
+          options.UseSqlServer(builder.Configuration.GetConnectionString("LaptopDbConnection")));
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -27,7 +31,7 @@ namespace LaptopCart
             app.MapStaticAssets();
             app.MapControllerRoute(
                 name: "default",
-                pattern: "{controller=Home}/{action=Index}/{id?}")
+                pattern: "{controller=AdminProduct}/{action=Create}/{id?}")
                 .WithStaticAssets();
 
             app.Run();
