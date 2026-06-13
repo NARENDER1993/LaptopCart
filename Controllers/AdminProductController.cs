@@ -1,6 +1,7 @@
 ﻿using LaptopCart.Data;
 using LaptopCart.Models;
 using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
 
 namespace LaptopCart.Controllers
 {
@@ -15,10 +16,106 @@ namespace LaptopCart.Controllers
             _context = context;
             _webHostEnvironment = webHostEnvironment;
         }
-
+        [HttpGet]
         public IActionResult Index()
         {
-            return View();
+            List<Product> productslist = _context.Products.ToList();
+            return View(productslist);
+        }
+
+        public IActionResult Edit(int id)
+        {
+            var product = _context.Products.Find(id);
+
+            if (product == null)
+            {
+                return NotFound();
+            }
+
+            return View(product);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Edit(Product model)
+        {
+            if (ModelState.IsValid)
+            {
+                var product = _context.Products.Find(model.Id);
+
+                if (product == null)
+                {
+                    return NotFound();
+                }
+
+                // Update normal fields
+                product.Name = model.Name;
+                product.Description = model.Description;
+                product.Price = model.Price;
+
+                // Check if new image selected
+                if (model.ImageFile != null)
+                {
+                    string folder = Path.Combine(Directory.GetCurrentDirectory(),
+                                                 "wwwroot/images");
+
+                    string fileName = Guid.NewGuid().ToString() +
+                                      Path.GetExtension(model.ImageFile.FileName);
+
+                    string filePath = Path.Combine(folder, fileName);
+
+                    using (var stream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await model.ImageFile.CopyToAsync(stream);
+                    }
+
+                    product.ImagePath = "/images/" + fileName;
+                }
+
+                _context.Update(product);
+                await _context.SaveChangesAsync();
+
+                return RedirectToAction("Index");
+            }
+
+            return View(model);
+        }
+
+        public async Task<IActionResult> Delete(int id)
+        {
+            if (id == 0)
+            {
+                return NotFound();
+            }
+            var result = await _context.Products.FindAsync(id);
+            if (result == null)
+            {
+                return NotFound();
+            }
+
+            return View(result);
+        }
+        [HttpPost]
+        public async Task<IActionResult> DeleteConfimed(int id)
+        {
+
+            var product= await _context.Products.FindAsync(id);
+            if (product != null)
+            {
+                //if image file need to be deleted in folder
+                if (!string.IsNullOrEmpty(product.ImagePath))
+                {
+                    //var imagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", product.ImagePath.TrimStart('/'));
+                    var imagePath = Path.Combine(_webHostEnvironment.WebRootPath, product.ImagePath.TrimStart('/').Replace("/", "\\"));
+                    if(System.IO.File.Exists(imagePath))
+                    {
+                        System.IO.File.Delete(imagePath);
+                    }
+                }
+                _context.Products.Remove(product);
+                await _context.SaveChangesAsync();
+            }
+
+        return RedirectToAction(nameof(Index));
         }
         public IActionResult Create()
         {

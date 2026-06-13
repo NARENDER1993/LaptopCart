@@ -1,0 +1,33 @@
+﻿@model Product
+
+<form asp-action="Edit" enctype="multipart/form-data">
+
+    <input type="hidden" asp-for="Id" />
+
+    <div>
+        <label>Name</label>
+        <input asp-for="Name" />
+    </div>
+
+    <div>
+        <label>Description</label>
+        <input asp-for="Description" />
+    </div>
+
+    <div>
+        <label>Price</label>
+        <input asp-for="Price" />
+    </div>
+
+    <div>
+        <img src="@Model.ImagePath" width="100" />
+    </div>
+
+    <div>
+        <label>New Image</label>
+        <input asp-for="ImageFile" type="file" />
+    </div>
+
+    <button type="submit">Update</button>
+
+</form>
