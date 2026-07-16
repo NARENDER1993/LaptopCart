@@ -1,0 +1,24 @@
+﻿@model LaptopCart.ViewModels.LoginViewModel
+<h1 class="text-center">Login Page</h1>
+<div>
+    <form asp-action="Login" method="post">
+        <div class="mb-3">
+            <label asp-for="Email">Email Address</label>
+            <input asp-for="Email" class="form-control" placeholder="Email" />
+            <span asp-validation-for="Email" class="text-danger"></span>
+        </div>
+        <div>
+            <label asp-for="Password">Password</label>
+            <input asp-for="Password" class="form-control" placeholder="Password" />
+            <span asp-validation-for="Password" class="text-danger"></span>
+        </div>
+        <div>
+            <input asp-for="RememberMe" type="checkbox" class="form-check-input" />
+            <label asp-for="RememberMe" class="form-check-label">Remember Me</label>
+        </div>
+        <div>
+            <button type="submit" class="btn btn-primary mt-3">Login</button>
+        </div>
+    </form>
+
+</div>

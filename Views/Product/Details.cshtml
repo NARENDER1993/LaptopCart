@@ -1,0 +1,42 @@
+﻿@model Product
+<h2 class="text-center">
+    Product details
+</h2>
+<form method="post" asp-action="Details">
+    <input type="hidden" name="ProductId" value="@Model.Id" />
+    <div class="container">
+
+        @if (!string.IsNullOrEmpty(Model.ImagePath))
+        {
+            <img src="@Model.ImagePath" style="height=200px; object-fit:cover;" />
+        }
+        else
+        {
+            <img src="https://placehold.co/500x200png" class="card-img-top rounded" />
+        }
+        <div class="card-body">
+            <p class="card-title">@Model.Name</p>
+            <p class="card-title">@Model.Description</p>
+            <p class="card-title">₹@Model.Price</p>
+            
+            @* Qunatity implememntation *@
+            <div>
+                <span>Qty</span>
+                <input type="number" name="Quantity" value="1" class="form-control text-end" min="1" />
+
+            </div>
+            <div>
+                <button type="submit">Add to cart</button>
+
+            </div>
+            <div>
+                <a asp-action="Index" >back to home</a>
+            </div>
+            
+
+
+        </div>
+
+
+    </div>
+</form>

@@ -1,0 +1,58 @@
+﻿@model IEnumerable<CartItem>
+
+@{
+    double total = 0;
+    double itemtotal = 0;
+}
+<h2>Shopping -cart</h2>
+<table class="table table-bordered shadow">
+    <thead class="table-dark">
+        <tr>
+            <th>Image</th>
+            <th>Product</th>
+            <th>Description</th>
+            <th>Quantity</th>
+            <th>UnitPrice</th>
+            <th>Total</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            itemtotal = item.Quantity * Convert.ToDouble(item.Product.Price);
+            total += itemtotal;
+            <tr>
+                <td>
+                    <img src="@(item.Product.ImagePath??"https://placehold.co/500x600/png")"
+                    class="img-thumbnail" style="max-height:80px;"/>
+                </td>
+
+                <td>@item.Product.Name</td>
+                <td>@item.Product.Description</td>
+                <td>@item.Quantity</td>
+                <td>@item.Product.Price.ToString("0.00")</td>
+                <td>@itemtotal.ToString("0.00")</td>
+                <td>
+                    <div class="btn-group">
+                        <a asp-action="Plus" asp-route-cartid="@item.Id"><i class="bi bi-plus"></i></a>
+                        <a asp-action="Minus" asp-route-cartid="@item.Id"><i class="bi bi-dash"></i></a>
+                        <a asp-action="Remove" asp-route-cartid="@item.Id"><i class="bi bi-trash"></i></a>
+                    </div>
+
+                </td>
+            </tr>
+
+        }
+    </tbody>
+    <tfoot>
+        <tr class="table-secondary">
+            <td colspan="5"class="text-end fw-bold">Grand total:</td>
+            <td colspan="2" class="fw-bold">@total.ToString("0.00")</td>
+        </tr>
+    </tfoot>
+</table>
+<div>
+    <a asp-controller="Product" asp-action="Index" class="btn btn-primary">Continue Shopping</a>
+    <a asp-action="Summary" class="btn btn-primary">Proceed to Summary</a>
+</div>
