@@ -75,6 +75,7 @@ namespace LaptopCart.Controllers
 
                 _context.Update(product);
                 await _context.SaveChangesAsync();
+                TempData["Success"] = "Record updated successfully!";
 
                 return RedirectToAction("Index");
             }
@@ -115,9 +116,10 @@ namespace LaptopCart.Controllers
                 }
                 _context.Products.Remove(product);
                 await _context.SaveChangesAsync();
+                
             }
-
-        return RedirectToAction(nameof(Index));
+            TempData["Success"] = "Record deleted successfully!";
+            return RedirectToAction(nameof(Index));
         }
         public IActionResult Create()
         {
@@ -165,6 +167,7 @@ namespace LaptopCart.Controllers
             {
                 _context.Products.Add(product);
                 await _context.SaveChangesAsync();
+                TempData["Success"] = "Record inserted successfully";
                 return RedirectToAction(nameof(Index));
 
             }

@@ -1,6 +1,19 @@
 ﻿@model IEnumerable<Product>
 
-    <div class="row align-items-center mb-3">
+@* <script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+
+@if (TempData["SuccessMessage"] != null)
+{
+   
+    <script>
+        toastr.success('@TempData["SuccessMessage"]');
+    </script>
+
+} *@
+ @* <partial name="_notifcationMessage" />  *@
+
+<div class="row align-items-center mb-3">
         <div class="col-md-2">
             <h2 class="text-secondary">Product list</h2>
         </div>

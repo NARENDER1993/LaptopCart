@@ -36,6 +36,7 @@ namespace LaptopCart.Controllers
             cartitemsfromDB.Quantity += 1;
             _context.CartItems.Update(cartitemsfromDB);
             await _context.SaveChangesAsync();
+            TempData["Success"] = "Cart quantity increased";
             return RedirectToAction(nameof(Index));
         }
         public async Task<IActionResult> Minus(int cartid)
@@ -61,7 +62,7 @@ namespace LaptopCart.Controllers
                 await _context.SaveChangesAsync();
 
             }
-
+            TempData["Success"] = "Cart quantity decreased";
             return RedirectToAction(nameof(Index));
         }
 
@@ -77,7 +78,7 @@ namespace LaptopCart.Controllers
             var cartitemscount = _context.CartItems.Count(c => c.UserId == userid);
             HttpContext.Session.SetInt32(SD.SessionCart, cartitemscount);
 
-
+            TempData["Success"] = "Cart item Removed";
             return RedirectToAction(nameof(Index));
         }
     }
